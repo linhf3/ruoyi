@@ -61,6 +61,13 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 证劵-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-security</artifactId>
+            <version>3.8.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
