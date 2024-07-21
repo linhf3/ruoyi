@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.annotation.Anonymous;
+import com.ruoyi.security.vo.SecuritiesFutureVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -114,5 +115,17 @@ public class TbSecuritiesDataController extends BaseController
     public AjaxResult crawl()
     {
         return toAjax(tbSecuritiesDataService.crawl());
+    }
+
+    /**
+     * 查询实时期货分析数据
+     */
+    @PreAuthorize("@ss.hasPermi('security:futures:findList')")
+    @GetMapping("/findList")
+    public TableDataInfo findList(TbSecuritiesData tbSecuritiesData)
+    {
+        startPage();
+        List<SecuritiesFutureVo> list = tbSecuritiesDataService.findList();
+        return getDataTable(list);
     }
 }

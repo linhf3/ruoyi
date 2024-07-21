@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTbSecuritiesDataVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertTbSecuritiesData" parameterType="TbSecuritiesData" useGeneratedKeys="true" keyProperty="id">
         insert into tb_securities_data
         <trim prefix="(" suffix=")" suffixOverrides=",">

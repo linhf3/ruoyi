@@ -2,6 +2,7 @@ package com.ruoyi.security.service;
 
 import java.util.List;
 import com.ruoyi.security.domain.TbSecuritiesData;
+import com.ruoyi.security.vo.SecuritiesFutureVo;
 
 /**
  * 证劵交易数据源Service接口
@@ -64,4 +65,8 @@ public interface ITbSecuritiesDataService
      */
     boolean crawl();
 
+    /**
+     * 查询实时期货分析数据
+     */
+    List<SecuritiesFutureVo> findList();
 }
