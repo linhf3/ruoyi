@@ -85,7 +85,7 @@ export default {
         this.getList();
       }
       // 实现轮询
-      this.clearTimeSet = setInterval(()=>{this.getList(),this.time}, 5000);
+      this.clearTimeSet = setInterval(()=>{this.getList(),this.time}, 4000);
     },
     stop(){
       clearInterval(this.clearTimeSet);
