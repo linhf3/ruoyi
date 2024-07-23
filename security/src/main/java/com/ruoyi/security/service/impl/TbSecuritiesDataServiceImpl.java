@@ -69,6 +69,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int insertTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.insertTbSecuritiesData(tbSecuritiesData);
     }
 
@@ -81,6 +82,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int updateTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.updateTbSecuritiesData(tbSecuritiesData);
     }
 
@@ -93,6 +95,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int deleteTbSecuritiesDataByIds(Long[] ids)
     {
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.deleteTbSecuritiesDataByIds(ids);
     }
 
@@ -203,6 +206,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
             Double price = (Double) reMap.get("price");
             securitiesFutureVo.setDailySpread(dailySpread);
             securitiesFutureVo.setPrice(price);
+            securitiesFutureVo.setUndulate(tbSecuritiesData.getUndulate());
             //获取策略，上下偏离
             Double deviation = null == tbSecuritiesData.getDeviation() || 0 == tbSecuritiesData.getDeviation()?100:tbSecuritiesData.getDeviation();
             //点数振幅

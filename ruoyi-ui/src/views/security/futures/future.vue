@@ -6,7 +6,7 @@
           type="warning"
           plain
           size="mini"
-          @click="start"
+          @click="refresh"
           v-hasPermi="['security:future:start']"
         >开始</el-button>
       </el-col>
@@ -21,7 +21,7 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="futuresList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="futuresList" >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="名称" align="center" prop="name" />
@@ -63,12 +63,12 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.refresh();
   },
   methods: {
     /** 查询证劵交易数据源列表 */
     getList() {
-      this.loading = true;
+      //this.loading = true;
       findList().then(response => {
         this.futuresList = response.rows;
         this.total = response.total;
@@ -79,7 +79,19 @@ export default {
     handleCrawl() {
       crawl();
       this.getList();
+    },
+    refresh() { // 从服务端加载数据的函数
+      if(this.futuresList.length <= 0){
+        this.getList();
+      }
+      // 实现轮询
+      this.clearTimeSet = setInterval(()=>{this.getList(),this.time}, 5000);
+    },
+    stop(){
+      clearInterval(this.clearTimeSet);
     }
+
+
   }
 };
 </script>
