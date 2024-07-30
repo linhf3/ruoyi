@@ -20,7 +20,7 @@ public class SecuritiesFutureVo extends BaseEntity
     /** 一日差价 */
     private String proportion;
 
-    /** 一日均价 */
+    /** 振幅 */
     private Double dailySpread;
 
     /** 当前偏离值（比较上下偏离后得到） */
