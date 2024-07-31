@@ -1,6 +1,7 @@
 package com.ruoyi.security.service.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.core.redis.RedisCache;
@@ -221,9 +222,10 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
             }
             list.add(securitiesFutureVo);
         }
+        List<SecuritiesFutureVo> collectList = list.stream().sorted(Comparator.comparing(SecuritiesFutureVo::getDailySpread,Comparator.reverseOrder())).collect(Collectors.toList());
         long endTime = System.currentTimeMillis();
         log.debug("执行时长：{}", endTime - startTime);
-        log.debug("期货：{}", list.toArray().toString());
-        return list;
+        log.debug("期货：{}", collectList);
+        return collectList;
     }
 }
