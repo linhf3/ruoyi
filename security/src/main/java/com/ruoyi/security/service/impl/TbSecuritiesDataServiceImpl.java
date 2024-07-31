@@ -225,7 +225,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
         List<SecuritiesFutureVo> collectList = list.stream().sorted(Comparator.comparing(SecuritiesFutureVo::getDailySpread,Comparator.reverseOrder())).collect(Collectors.toList());
         long endTime = System.currentTimeMillis();
         log.debug("执行时长：{}", endTime - startTime);
-        log.debug("期货：{}", collectList.toArray().toString());
+        log.debug("期货：{}", collectList);
         return collectList;
     }
 }
