@@ -12,6 +12,7 @@ import com.ruoyi.security.vo.SecuritiesFutureVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.security.mapper.TbSecuritiesDataMapper;
 import com.ruoyi.security.domain.TbSecuritiesData;
@@ -26,7 +27,7 @@ import org.springframework.util.CollectionUtils;
  */
 @Service
 @Slf4j
-public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService 
+public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
 {
     @Autowired
     private TbSecuritiesDataMapper tbSecuritiesDataMapper;
