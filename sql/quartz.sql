@@ -171,4 +171,22 @@ create table QRTZ_SIMPROP_TRIGGERS (
     foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
 ) engine=innodb comment = '同步机制的行锁表';
 
+
+create table tb_securities_data (
+                                    id         bigint(20)      not null auto_increment    comment '主键',
+                                    code           varchar(100)   null            comment '编码',
+                                    name             varchar(100)      null            comment '名称',
+                                    exchange_code         varchar(50)    null            comment '交易所-编码',
+                                    deviation        double     null       comment '偏离值',
+                                    undulate        double     null       comment '波动',
+                                    type        tinyint    null            comment '类型',
+                                    status           tinyint     null            comment '状态',
+                                    add_user                varchar(10)     null            comment '创建人',
+                                    add_time           datetime       null            comment '创建时间',
+                                    modifier_user                varchar(10)     null            comment '修改人',
+                                    modifier_time           datetime       null            comment '修改时间',
+                                    primary key ( id)
+) engine=innodb comment = '证劵交易表';
+
+
 commit;
