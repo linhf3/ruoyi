@@ -68,6 +68,13 @@
             <version>3.8.7</version>
         </dependency>
 
+        <!-- 工厂管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-factory</artifactId>
+            <version>3.8.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -209,6 +209,9 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
             securitiesFutureVo.setDailySpread(dailySpread);
             securitiesFutureVo.setPrice(price);
             securitiesFutureVo.setUndulate(tbSecuritiesData.getUndulate());
+            securitiesFutureVo.setDianshu((Integer) reMap.get("dianshu"));
+            securitiesFutureVo.setUp((Integer) reMap.get("up"));
+            securitiesFutureVo.setDown((Integer) reMap.get("down"));
             //获取策略，上下偏离
             Double deviation = null == tbSecuritiesData.getDeviation() || 0 == tbSecuritiesData.getDeviation()?100:tbSecuritiesData.getDeviation();
             //点数振幅

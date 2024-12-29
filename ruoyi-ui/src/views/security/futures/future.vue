@@ -28,6 +28,9 @@
       <el-table-column label="数值" align="center" prop="price" />
       <el-table-column label="偏离" align="center" prop="proportion" />
       <el-table-column label="振幅" align="center" prop="dailySpread" />
+      <el-table-column label="最大点数" align="center" prop="dianshu" />
+      <el-table-column label="上振" align="center" prop="up" />
+      <el-table-column label="下振" align="center" prop="down" />
       <el-table-column label="波动提示值" align="center" prop="undulate" />
     </el-table>
 

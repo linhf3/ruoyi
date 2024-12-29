@@ -79,10 +79,17 @@ public class FuturesCoreAlgorithm implements CoreAlgorithm {
             index = SortUtils.binarySearch(negatives, 0, negatives.length, curentNum);
             proportion = -(index / negatives.length) * 100;
         }
+        String[] split = trendsList.get(trendsList.size() - 1).toString().split(",");
+        //当前
+        String cuPrice = split[1];
+        String pingjunPrice = split[4];
         //找出最大最小值
         double max = Collections.max(price);
         double min = Collections.min(price);
         reMap.put("dailySpread", Double.valueOf(Constant.format.format(max - min)));
+        reMap.put("up", (int) (Double.valueOf(cuPrice) - min));
+        reMap.put("down", (int) (Double.valueOf(cuPrice) - max));
+        reMap.put("dianshu", (int) (Double.valueOf(cuPrice) - Double.valueOf(pingjunPrice)));
         reMap.put("proportion", proportion > 0 ? "+" + Math.round(proportion) + "%" : Math.round(proportion) + "%");
         return reMap;
     }

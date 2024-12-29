@@ -188,5 +188,15 @@ create table tb_securities_data (
                                     primary key ( id)
 ) engine=innodb comment = '证劵交易表';
 
+create table tb_securities_log (
+                                    id         bigint(20)      not null auto_increment    comment '主键',
+                                    code           varchar(100)   null            comment '编码',
+                                    name             varchar(100)      null            comment '名称',
+                                    undulate        double     null       comment '振幅',
+                                    difference        double     null       comment '最大差值',
+                                    log_date           date       null            comment '时间',
+                                    primary key ( id)
+) engine=innodb comment = '交易日志表';
+
 
 commit;
