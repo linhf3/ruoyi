@@ -120,7 +120,7 @@ public class TbSecuritiesDataController extends BaseController
     /**
      * 查询实时期货分析数据
      */
-    @PreAuthorize("@ss.hasPermi('security:futures:findList')")
+    //@PreAuthorize("@ss.hasPermi('security:futures:findList')")
     @GetMapping("/findList")
     public TableDataInfo findList(TbSecuritiesData tbSecuritiesData)
     {
