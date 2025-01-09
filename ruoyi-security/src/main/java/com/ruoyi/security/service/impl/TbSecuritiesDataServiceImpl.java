@@ -1,7 +1,6 @@
 package com.ruoyi.security.service.impl;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.core.redis.RedisCache;
@@ -12,7 +11,6 @@ import com.ruoyi.security.vo.SecuritiesFutureVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.security.mapper.TbSecuritiesDataMapper;
 import com.ruoyi.security.domain.TbSecuritiesData;
@@ -165,71 +163,8 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public List<SecuritiesFutureVo> findList() {
         //1.查询有效配置
-        List<TbSecuritiesData> tbSecuritiesDataList = redisCache.getCacheList("tbSecuritiesDataList");
-        if (CollectionUtils.isEmpty(tbSecuritiesDataList)){
-            TbSecuritiesData tbSecuritiesData = new TbSecuritiesData();
-            tbSecuritiesData.setType(1);
-            tbSecuritiesData.setStatus(0);
-            tbSecuritiesDataList = tbSecuritiesDataMapper.selectTbSecuritiesDataList(tbSecuritiesData);
-            if (!CollectionUtils.isEmpty(tbSecuritiesDataList)){
-                redisCache.setCacheList("tbSecuritiesDataList",tbSecuritiesDataList);
-            }
-        }
-        if (CollectionUtils.isEmpty(tbSecuritiesDataList)){
-            return null;
-        }
-
-        //2.循环爬数据并计算封装到list中
-        List<SecuritiesFutureVo> list = new LinkedList<>();
-        long startTime = System.currentTimeMillis();
-        for (TbSecuritiesData tbSecuritiesData : tbSecuritiesDataList) {
-            //拼接地址
-            Map urlMap = new HashMap<>();
-            urlMap.put("futuresUrl", tbSecuritiesData.getExchangeCode());
-            //发送http请求
-            String rx = HttpUtils.sendGet(new StrSubstitutor(urlMap).replace(Constant.futuresUrl));
-            Map node = (Map) JSON.parse(rx);
-            //数据集
-            Map map = (Map) node.get("data");
-            List trendsM = (List) map.get("trends");
-            //白天开盘，无数据的情况（晚上）
-            if (CollectionUtils.isEmpty(trendsM)) {
-                continue;
-            }
-            SecuritiesFutureVo securitiesFutureVo = new SecuritiesFutureVo();
-            securitiesFutureVo.setCode(tbSecuritiesData.getCode());
-            securitiesFutureVo.setName(tbSecuritiesData.getName());
-            securitiesFutureVo.setExchangeCode(tbSecuritiesData.getExchangeCode());
-            Map<String, Object> reMap = coreAlgorithmContet.deviationTheDayRate("futuresCoreAlgorithm", map);
-            String proportion = (String) reMap.get("proportion");
-            Double proportionDouble = Double.valueOf(proportion.replace("+", "").replace("%", ""));
-            securitiesFutureVo.setProportion(proportion);
-            Double dailySpread = (Double) reMap.get("dailySpread");
-            Double price = (Double) reMap.get("price");
-            securitiesFutureVo.setDailySpread(dailySpread);
-            securitiesFutureVo.setPrice(price);
-            securitiesFutureVo.setUndulate(tbSecuritiesData.getUndulate());
-            securitiesFutureVo.setDianshu((Integer) reMap.get("dianshu"));
-            securitiesFutureVo.setUp((Integer) reMap.get("up"));
-            securitiesFutureVo.setDown((Integer) reMap.get("down"));
-            //获取策略，上下偏离
-            Double deviation = null == tbSecuritiesData.getDeviation() || 0 == tbSecuritiesData.getDeviation()?100:tbSecuritiesData.getDeviation();
-            //点数振幅
-            //Double undulate = null == tbSecuritiesData.getUndulate() || 0 == tbSecuritiesData.getUndulate()?0:tbSecuritiesData.getUndulate();
-            if (proportionDouble <= -deviation) {
-                securitiesFutureVo.setPositiveNegativeFlag(-1);
-                reMap.put("positiveNegativeFlag", -1);
-            } else if (proportionDouble >= deviation) {
-                securitiesFutureVo.setPositiveNegativeFlag(1);
-            } else {
-                securitiesFutureVo.setPositiveNegativeFlag(0);
-            }
-            list.add(securitiesFutureVo);
-        }
-        List<SecuritiesFutureVo> collectList = list.stream().sorted(Comparator.comparing(SecuritiesFutureVo::getDailySpread,Comparator.reverseOrder())).collect(Collectors.toList());
-        long endTime = System.currentTimeMillis();
-        log.debug("执行时长：{}", endTime - startTime);
-        log.debug("期货：{}", collectList);
-        return collectList;
+        List<SecuritiesFutureVo> securitiesFutureVoList = redisCache.getCacheList("securitiesFutureVoList");
+        return securitiesFutureVoList;
     }
+
 }
