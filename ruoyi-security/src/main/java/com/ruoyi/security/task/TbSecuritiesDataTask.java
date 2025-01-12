@@ -51,7 +51,7 @@ public class TbSecuritiesDataTask {
             LocalTime targetTime3 = LocalTime.of(13, 30);
             LocalTime targetTime4 = LocalTime.of(15, 01);
             LocalTime targetTime5 = LocalTime.of(21, 00);
-            LocalTime targetTime6 = LocalTime.of(23, 59);
+            LocalTime targetTime6 = LocalTime.of(23, 00);
             if ((now.isAfter(targetTime1) && now.isBefore(targetTime2)) || (now.isAfter(targetTime3) && now.isBefore(targetTime4))
                     || (now.isAfter(targetTime5) && now.isBefore(targetTime6))){
                 //1.查询有效配置
