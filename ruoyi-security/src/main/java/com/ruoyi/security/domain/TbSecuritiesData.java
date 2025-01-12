@@ -8,10 +8,10 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 证劵交易数据源对象 tb_securities_data
+ * 证劵交易对象 tb_securities_data
  * 
  * @author ruoyi
- * @date 2024-07-21
+ * @date 2025-01-12
  */
 public class TbSecuritiesData extends BaseEntity
 {
@@ -48,20 +48,11 @@ public class TbSecuritiesData extends BaseEntity
     @Excel(name = "状态")
     private Integer status;
 
-    /** 创建者 */
-    @Excel(name = "创建者")
+    /** 创建人 */
     private String addUser;
 
     /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date addTime;
-
-    /** 修改人 */
-    private String modifierUser;
-
-    /** 修改时间 */
-    private Date modifierTime;
 
     public void setId(Long id) 
     {
@@ -99,21 +90,21 @@ public class TbSecuritiesData extends BaseEntity
     {
         return exchangeCode;
     }
-    public void setDeviation(Double deviation) 
+    public void setDeviation(Double deviation)
     {
         this.deviation = deviation;
     }
 
-    public Double getDeviation() 
+    public Double getDeviation()
     {
         return deviation;
     }
-    public void setUndulate(Double undulate) 
+    public void setUndulate(Double undulate)
     {
         this.undulate = undulate;
     }
 
-    public Double getUndulate() 
+    public Double getUndulate()
     {
         return undulate;
     }
@@ -153,24 +144,6 @@ public class TbSecuritiesData extends BaseEntity
     {
         return addTime;
     }
-    public void setModifierUser(String modifierUser) 
-    {
-        this.modifierUser = modifierUser;
-    }
-
-    public String getModifierUser() 
-    {
-        return modifierUser;
-    }
-    public void setModifierTime(Date modifierTime) 
-    {
-        this.modifierTime = modifierTime;
-    }
-
-    public Date getModifierTime() 
-    {
-        return modifierTime;
-    }
 
     @Override
     public String toString() {
@@ -185,8 +158,6 @@ public class TbSecuritiesData extends BaseEntity
             .append("status", getStatus())
             .append("addUser", getAddUser())
             .append("addTime", getAddTime())
-            .append("modifierUser", getModifierUser())
-            .append("modifierTime", getModifierTime())
             .toString();
     }
 }

@@ -17,14 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="交易所-编码" prop="exchangeCode">
-        <el-input
-          v-model="queryParams.exchangeCode"
-          placeholder="请输入交易所-编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="偏离值" prop="deviation">
         <el-input
           v-model="queryParams.deviation"
@@ -41,37 +33,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="类型" prop="type">
-        <el-input
-          v-model="queryParams.type"
-          placeholder="请输入类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-input
-          v-model="queryParams.status"
-          placeholder="请输入状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建者" prop="addUser">
-        <el-input
-          v-model="queryParams.addUser"
-          placeholder="请输入创建者"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="addTime">
-        <el-date-picker clearable
-          v-model="queryParams.addTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择创建时间">
-        </el-date-picker>
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_normal_disable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -122,15 +92,6 @@
           v-hasPermi="['security:futures:export']"
         >导出</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          size="mini"
-          @click="handleCrawl"
-          v-hasPermi="['security:futures:crawl']"
-        >爬取数据</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -143,11 +104,9 @@
       <el-table-column label="偏离值" align="center" prop="deviation" />
       <el-table-column label="波动" align="center" prop="undulate" />
       <el-table-column label="类型" align="center" prop="type" />
-      <el-table-column label="状态" align="center" prop="status" />
-      <el-table-column label="创建者" align="center" prop="addUser" />
-      <el-table-column label="创建时间" align="center" prop="addTime" width="180">
+      <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.addTime, '{y}-{m}-{d}') }}</span>
+          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -178,7 +137,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改证劵交易数据源对话框 -->
+    <!-- 添加或修改证劵交易对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="编码" prop="code">
@@ -196,22 +155,15 @@
         <el-form-item label="波动" prop="undulate">
           <el-input v-model="form.undulate" placeholder="请输入波动" />
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-input v-model="form.type" placeholder="请输入类型" />
-        </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-input v-model="form.status" placeholder="请输入状态" />
-        </el-form-item>
-        <el-form-item label="创建者" prop="addUser">
-          <el-input v-model="form.addUser" placeholder="请输入创建者" />
-        </el-form-item>
-        <el-form-item label="创建时间" prop="addTime">
-          <el-date-picker clearable
-            v-model="form.addTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间">
-          </el-date-picker>
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option
+              v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -223,10 +175,11 @@
 </template>
 
 <script>
-import { listFutures, getFutures, delFutures, addFutures, updateFutures,crawl } from "@/api/security/futures";
+import { listFutures, getFutures, delFutures, addFutures, updateFutures } from "@/api/security/futures";
 
 export default {
   name: "Futures",
+  dicts: ['sys_normal_disable'],
   data() {
     return {
       // 遮罩层
@@ -241,7 +194,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 证劵交易数据源表格数据
+      // 证劵交易表格数据
       futuresList: [],
       // 弹出层标题
       title: "",
@@ -253,13 +206,10 @@ export default {
         pageSize: 10,
         code: null,
         name: null,
-        exchangeCode: null,
         deviation: null,
         undulate: null,
         type: null,
         status: null,
-        addUser: null,
-        addTime: null,
       },
       // 表单参数
       form: {},
@@ -272,7 +222,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询证劵交易数据源列表 */
+    /** 查询证劵交易列表 */
     getList() {
       this.loading = true;
       listFutures(this.queryParams).then(response => {
@@ -324,7 +274,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加证劵交易数据源";
+      this.title = "添加证劵交易";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -333,7 +283,7 @@ export default {
       getFutures(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改证劵交易数据源";
+        this.title = "修改证劵交易";
       });
     },
     /** 提交按钮 */
@@ -359,17 +309,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除证劵交易数据源编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除证劵交易编号为"' + ids + '"的数据项？').then(function() {
         return delFutures(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
-    },
-    /** 爬取数据按钮操作 */
-    handleCrawl() {
-      crawl();
-      this.getList();
     },
     /** 导出按钮操作 */
     handleExport() {

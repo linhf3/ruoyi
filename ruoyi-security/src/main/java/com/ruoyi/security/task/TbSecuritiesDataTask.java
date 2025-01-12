@@ -90,8 +90,7 @@ public class TbSecuritiesDataTask {
                 long endTime = System.currentTimeMillis();
                 log.debug("执行时长：{}", endTime - startTime);
                 //4、存到redis中
-                redisCache.deleteObject("securitiesFutureVoList");
-                redisCache.setCacheList("securitiesFutureVoList",list);
+                redisCache.setCacheMapValue("money","securitiesFutureVoList",list);
             }
         }catch (Exception e){
             log.info("异常：",e);

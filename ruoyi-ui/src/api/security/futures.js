@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询证劵交易数据源列表
+// 查询证劵交易列表
 export function listFutures(query) {
   return request({
     url: '/security/futures/list',
@@ -9,7 +9,7 @@ export function listFutures(query) {
   })
 }
 
-// 查询证劵交易数据源详细
+// 查询证劵交易详细
 export function getFutures(id) {
   return request({
     url: '/security/futures/' + id,
@@ -17,7 +17,7 @@ export function getFutures(id) {
   })
 }
 
-// 新增证劵交易数据源
+// 新增证劵交易
 export function addFutures(data) {
   return request({
     url: '/security/futures',
@@ -26,7 +26,7 @@ export function addFutures(data) {
   })
 }
 
-// 修改证劵交易数据源
+// 修改证劵交易
 export function updateFutures(data) {
   return request({
     url: '/security/futures',
@@ -35,18 +35,10 @@ export function updateFutures(data) {
   })
 }
 
-// 删除证劵交易数据源
+// 删除证劵交易
 export function delFutures(id) {
   return request({
     url: '/security/futures/' + id,
     method: 'delete'
-  })
-}
-
-// 爬取证劵交易数据
-export function crawl() {
-  return request({
-    url: '/security/futures/crawl',
-    method: 'get'
   })
 }

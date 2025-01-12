@@ -6,7 +6,6 @@ import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.core.redis.RedisCache;
 import com.ruoyi.common.enums.Constant;
 import com.ruoyi.common.utils.http.HttpUtils;
-import com.ruoyi.security.algorithm.CoreAlgorithmContet;
 import com.ruoyi.security.vo.SecuritiesFutureVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -18,14 +17,14 @@ import com.ruoyi.security.service.ITbSecuritiesDataService;
 import org.springframework.util.CollectionUtils;
 
 /**
- * 证劵交易数据源Service业务层处理
+ * 证劵交易Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-07-21
+ * @date 2025-01-12
  */
 @Service
 @Slf4j
-public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
+public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService 
 {
     @Autowired
     private TbSecuritiesDataMapper tbSecuritiesDataMapper;
@@ -33,14 +32,11 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Autowired
     private RedisCache redisCache;
 
-    @Autowired
-    private CoreAlgorithmContet coreAlgorithmContet;
-
     /**
-     * 查询证劵交易数据源
+     * 查询证劵交易
      * 
-     * @param id 证劵交易数据源主键
-     * @return 证劵交易数据源
+     * @param id 证劵交易主键
+     * @return 证劵交易
      */
     @Override
     public TbSecuritiesData selectTbSecuritiesDataById(Long id)
@@ -49,10 +45,10 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     }
 
     /**
-     * 查询证劵交易数据源列表
+     * 查询证劵交易列表
      * 
-     * @param tbSecuritiesData 证劵交易数据源
-     * @return 证劵交易数据源
+     * @param tbSecuritiesData 证劵交易
+     * @return 证劵交易
      */
     @Override
     public List<TbSecuritiesData> selectTbSecuritiesDataList(TbSecuritiesData tbSecuritiesData)
@@ -61,53 +57,54 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     }
 
     /**
-     * 新增证劵交易数据源
+     * 新增证劵交易
      * 
-     * @param tbSecuritiesData 证劵交易数据源
+     * @param tbSecuritiesData 证劵交易
      * @return 结果
      */
     @Override
     public int insertTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
-        redisCache.deleteObject("tbSecuritiesDataList");
+        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
         return tbSecuritiesDataMapper.insertTbSecuritiesData(tbSecuritiesData);
     }
 
     /**
-     * 修改证劵交易数据源
+     * 修改证劵交易
      * 
-     * @param tbSecuritiesData 证劵交易数据源
+     * @param tbSecuritiesData 证劵交易
      * @return 结果
      */
     @Override
     public int updateTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
-        redisCache.deleteObject("tbSecuritiesDataList");
+        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
         return tbSecuritiesDataMapper.updateTbSecuritiesData(tbSecuritiesData);
     }
 
     /**
-     * 批量删除证劵交易数据源
+     * 批量删除证劵交易
      * 
-     * @param ids 需要删除的证劵交易数据源主键
+     * @param ids 需要删除的证劵交易主键
      * @return 结果
      */
     @Override
     public int deleteTbSecuritiesDataByIds(Long[] ids)
     {
-        redisCache.deleteObject("tbSecuritiesDataList");
+        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
         return tbSecuritiesDataMapper.deleteTbSecuritiesDataByIds(ids);
     }
 
     /**
-     * 删除证劵交易数据源信息
+     * 删除证劵交易信息
      * 
-     * @param id 证劵交易数据源主键
+     * @param id 证劵交易主键
      * @return 结果
      */
     @Override
     public int deleteTbSecuritiesDataById(Long id)
     {
+        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
         return tbSecuritiesDataMapper.deleteTbSecuritiesDataById(id);
     }
 
@@ -163,8 +160,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public List<SecuritiesFutureVo> findList() {
         //1.查询有效配置
-        List<SecuritiesFutureVo> securitiesFutureVoList = redisCache.getCacheList("securitiesFutureVoList");
-        return securitiesFutureVoList;
+        List<SecuritiesFutureVo> securitiesFutureVoList = redisCache.getCacheMapValue("money","securitiesFutureVoList");
+        return CollectionUtils.isEmpty(securitiesFutureVoList)?new ArrayList<>():securitiesFutureVoList;
     }
-
 }

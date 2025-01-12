@@ -181,8 +181,8 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>ruoyi-security</module>
         <module>ruoyi-factory</module>
+        <module>ruoyi-security</module>
     </modules>
     <packaging>pom</packaging>
 
