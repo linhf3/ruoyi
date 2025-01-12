@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
@@ -89,6 +90,8 @@ public class TbSecuritiesDataTask {
                 }
                 long endTime = System.currentTimeMillis();
                 log.debug("执行时长：{}", endTime - startTime);
+                //按照振幅降序排序
+                list.sort(Comparator.comparing(SecuritiesFutureVo::getDailySpread).reversed());
                 //4、存到redis中
                 redisCache.setCacheMapValue("money","securitiesFutureVoList",list);
             }
