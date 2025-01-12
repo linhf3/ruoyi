@@ -21,7 +21,7 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="futuresList" >
+    <el-table v-loading="loading" :data="futuresList" :row-class-name="rowClassName" >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="名称" align="center" prop="name" />
@@ -78,6 +78,13 @@ export default {
         this.loading = false;
       });
     },
+
+    rowClassName({ row }) {
+      if (row.positiveNegativeFlag === 1) {
+        return 'row-positiveNegativeFlag';
+      }
+      return '';
+    },
     /** 爬取数据按钮操作 */
     handleCrawl() {
       crawl();
@@ -98,3 +105,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.row-positiveNegativeFlag {
+  color: red;
+}
+</style>
