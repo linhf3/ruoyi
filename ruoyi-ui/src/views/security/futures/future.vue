@@ -62,11 +62,16 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10
-      }
+      },
+      // 轮询定时器
+      clearTimeSet: null
     };
   },
   created() {
     this.refresh();
+  },
+  beforeDestroy() {
+    this.stop(); // 确保在组件销毁时清除定时器
   },
   methods: {
     /** 查询证劵交易数据源列表 */
@@ -81,7 +86,9 @@ export default {
 
     rowClassName({ row }) {
       if (row.positiveNegativeFlag === 1) {
-        return 'row-positiveNegativeFlag';
+        return 'row-red';
+      }else if (row.positiveNegativeFlag === -1){
+        return 'row-green';
       }
       return '';
     },
@@ -94,11 +101,16 @@ export default {
       if(this.futuresList.length <= 0){
         this.getList();
       }
-      // 实现轮询
-      this.clearTimeSet = setInterval(()=>{this.getList(),this.time}, 4000);
+      // 实现轮询，每 5 秒发一次请求
+      if (this.clearTimeSet === null) { // 确保只创建一个定时器
+        this.clearTimeSet = setInterval(() => this.getList(), 4000);
+      }
     },
     stop(){
-      clearInterval(this.clearTimeSet);
+      if (this.clearTimeSet !== null) {
+        clearInterval(this.clearTimeSet);
+        this.clearTimeSet = null; // 重置定时器
+      }
     }
 
 
@@ -107,7 +119,10 @@ export default {
 </script>
 
 <style>
-.row-positiveNegativeFlag {
+.row-red {
   color: red;
+}
+.row-green {
+  color: green;
 }
 </style>

@@ -65,7 +65,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int insertTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
-        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.insertTbSecuritiesData(tbSecuritiesData);
     }
 
@@ -78,7 +78,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int updateTbSecuritiesData(TbSecuritiesData tbSecuritiesData)
     {
-        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.updateTbSecuritiesData(tbSecuritiesData);
     }
 
@@ -91,7 +91,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int deleteTbSecuritiesDataByIds(Long[] ids)
     {
-        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.deleteTbSecuritiesDataByIds(ids);
     }
 
@@ -104,7 +104,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public int deleteTbSecuritiesDataById(Long id)
     {
-        redisCache.deleteCacheMapValue("money","securitiesFutureVoList");
+        redisCache.deleteObject("tbSecuritiesDataList");
         return tbSecuritiesDataMapper.deleteTbSecuritiesDataById(id);
     }
 

@@ -11,6 +11,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,14 +39,21 @@ public class TbSecuritiesDataTask {
 
     ReentrantLock lock = new ReentrantLock();
 
-    public void execute(){
+    public void execute() throws InterruptedException {
+
         boolean b = lock.tryLock();
+        boolean f = false;
         if (!b){
             return;
         }
         try {
             // 获取当前时间
             LocalTime now = LocalTime.now();
+            //判断是否是周末
+            DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+            if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY){
+                return;
+            }
             // 定义目标时间 11:35
             LocalTime targetTime1 = LocalTime.of(9, 00);
             LocalTime targetTime2 = LocalTime.of(11, 31);
@@ -54,6 +63,7 @@ public class TbSecuritiesDataTask {
             LocalTime targetTime6 = LocalTime.of(23, 00);
             if ((now.isAfter(targetTime1) && now.isBefore(targetTime2)) || (now.isAfter(targetTime3) && now.isBefore(targetTime4))
                     || (now.isAfter(targetTime5) && now.isBefore(targetTime6))){
+                f = true;
                 //1.查询有效配置
                 List<TbSecuritiesData> tbSecuritiesDataList = redisCache.getCacheList("tbSecuritiesDataList");
                 if (CollectionUtils.isEmpty(tbSecuritiesDataList)){
@@ -100,6 +110,10 @@ public class TbSecuritiesDataTask {
         }finally {
             if (b){
                 lock.unlock();
+            }
+            if (f){
+                Thread.sleep(10000);
+                this.execute();
             }
         }
     }
