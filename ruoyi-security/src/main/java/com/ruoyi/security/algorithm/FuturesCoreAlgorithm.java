@@ -88,6 +88,8 @@ public class FuturesCoreAlgorithm implements CoreAlgorithm {
         double min = Collections.min(price);
         reMap.put("dailySpread", Double.valueOf(Constant.format.format(max - min)));
         reMap.put("up", (int) (Double.valueOf(cuPrice) - min));
+        reMap.put("min", min);
+        reMap.put("max", max);
         reMap.put("down", (int) (Double.valueOf(cuPrice) - max));
         reMap.put("dianshu", (int) (Double.valueOf(cuPrice) - Double.valueOf(pingjunPrice)));
         reMap.put("proportion", proportion > 0 ? "+" + Math.round(proportion) + "%" : Math.round(proportion) + "%");

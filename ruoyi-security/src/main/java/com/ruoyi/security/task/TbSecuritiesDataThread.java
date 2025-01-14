@@ -2,6 +2,7 @@ package com.ruoyi.security.task;
 
 import com.alibaba.fastjson2.JSON;
 import com.ruoyi.common.enums.Constant;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.security.algorithm.CoreAlgorithmContet;
 import com.ruoyi.security.domain.TbSecuritiesData;
@@ -18,7 +19,7 @@ public class TbSecuritiesDataThread implements Callable<SecuritiesFutureVo> {
 
     private CoreAlgorithmContet coreAlgorithmContet;
 
-    public TbSecuritiesDataThread(TbSecuritiesData tbSecuritiesData, CoreAlgorithmContet coreAlgorithmContet){
+    public TbSecuritiesDataThread(TbSecuritiesData tbSecuritiesData, CoreAlgorithmContet coreAlgorithmContet) {
         this.tbSecuritiesData = tbSecuritiesData;
         this.coreAlgorithmContet = coreAlgorithmContet;
     }
@@ -48,6 +49,8 @@ public class TbSecuritiesDataThread implements Callable<SecuritiesFutureVo> {
         securitiesFutureVo.setProportion(proportion);
         Double dailySpread = (Double) reMap.get("dailySpread");
         Double price = (Double) reMap.get("price");
+        Double min = (Double) reMap.get("min");
+        Double max = (Double) reMap.get("max");
         securitiesFutureVo.setDailySpread(dailySpread);
         securitiesFutureVo.setPrice(price);
         securitiesFutureVo.setUndulate(tbSecuritiesData.getUndulate());
@@ -58,11 +61,23 @@ public class TbSecuritiesDataThread implements Callable<SecuritiesFutureVo> {
         Double deviation = null == tbSecuritiesData.getDeviation() || 0 == tbSecuritiesData.getDeviation() ? 100 : tbSecuritiesData.getDeviation();
         //点数振幅
         //Double undulate = null == tbSecuritiesData.getUndulate() || 0 == tbSecuritiesData.getUndulate()?0:tbSecuritiesData.getUndulate();
+        Double undulate = tbSecuritiesData.getUndulate();
         if (proportionDouble <= -deviation) {
-            securitiesFutureVo.setPositiveNegativeFlag(-1);
-            reMap.put("positiveNegativeFlag", -1);
+            if (null != undulate) {
+                if (max - price >= undulate) {
+                    securitiesFutureVo.setPositiveNegativeFlag(-1);
+                }
+            } else {
+                securitiesFutureVo.setPositiveNegativeFlag(-1);
+            }
         } else if (proportionDouble >= deviation) {
-            securitiesFutureVo.setPositiveNegativeFlag(1);
+            if (null != undulate) {
+                if (price - min >= undulate) {
+                    securitiesFutureVo.setPositiveNegativeFlag(1);
+                }
+            } else {
+                securitiesFutureVo.setPositiveNegativeFlag(1);
+            }
         } else {
             securitiesFutureVo.setPositiveNegativeFlag(0);
         }
