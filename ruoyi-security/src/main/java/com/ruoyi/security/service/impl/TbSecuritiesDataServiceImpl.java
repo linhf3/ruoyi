@@ -115,6 +115,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     @Override
     public boolean crawl() {
         List<String> listF = Arrays.asList("103", "112", "113", "114", "115");
+        //List<String> listF = Arrays.asList("115");
         LinkedList<TbSecuritiesData> tbSecuritiesDataLinkedList = new LinkedList<>();
         listF.forEach(s -> {
             Map urlMap = new HashMap<>();
@@ -132,10 +133,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
             System.out.println(list.toArray());
             list.forEach(map -> {
                 String name = (String) map.get("name");
-                if (name.contains("烧碱")){
-                    System.out.println(map.toString());
-                }
-                if ((name.contains("主") && !name.contains("次")) || name.contains("250")) {
+                if ((name.contains("主") && !name.contains("次")) || name.contains("250") || name.contains("碱")) {
                     TbSecuritiesData tbSecuritiesData = new TbSecuritiesData();
                     if ("103".equals(s)) {
                         name = new StringBuilder(name).append("(美)").toString();
@@ -146,7 +144,7 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
                     tbSecuritiesData.setExchangeCode(new StringBuilder(s).append(".").append(dm).toString());
                     tbSecuritiesData.setDeviation(90.0);
                     tbSecuritiesData.setType(1);
-                    tbSecuritiesData.setStatus(0);
+                    tbSecuritiesData.setStatus(1);
                     tbSecuritiesData.setAddUser("admin");
                     tbSecuritiesData.setAddTime(new Date());
                     tbSecuritiesDataLinkedList.add(tbSecuritiesData);
