@@ -108,8 +108,8 @@ public class TbSecuritiesDataController extends BaseController
     /**
      * 爬取证劵交易数据
      */
-    @Anonymous
-    @PreAuthorize("@ss.hasPermi('security:futures:crawl')")
+    //@Anonymous
+    //@PreAuthorize("@ss.hasPermi('security:futures:crawl')")
     @Log(title = "证劵交易数据源", businessType = BusinessType.OTHER)
     @GetMapping("/crawl")
     public AjaxResult crawl()

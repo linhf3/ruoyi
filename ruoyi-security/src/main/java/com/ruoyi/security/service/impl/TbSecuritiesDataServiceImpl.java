@@ -132,7 +132,10 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
             System.out.println(list.toArray());
             list.forEach(map -> {
                 String name = (String) map.get("name");
-                if (name.contains("主") && !name.contains("次")) {
+                if (name.contains("烧碱")){
+                    System.out.println(map.toString());
+                }
+                if ((name.contains("主") && !name.contains("次")) || name.contains("250")) {
                     TbSecuritiesData tbSecuritiesData = new TbSecuritiesData();
                     if ("103".equals(s)) {
                         name = new StringBuilder(name).append("(美)").toString();
