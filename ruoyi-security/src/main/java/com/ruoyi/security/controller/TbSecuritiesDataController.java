@@ -122,7 +122,7 @@ public class TbSecuritiesDataController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('security:futures:findList')")
     @GetMapping("/findList")
-    public TableDataInfo findList(TbSecuritiesData tbSecuritiesData)
+    public TableDataInfo findList()
     {
         startPage();
         List<SecuritiesFutureVo> list = tbSecuritiesDataService.findList();
