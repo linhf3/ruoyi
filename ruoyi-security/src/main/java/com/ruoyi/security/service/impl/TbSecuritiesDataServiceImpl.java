@@ -159,6 +159,13 @@ public class TbSecuritiesDataServiceImpl implements ITbSecuritiesDataService
     }
 
     @Override
+    public List<SecuritiesFutureVo> lists() {
+        //1.查询有效配置
+        List<SecuritiesFutureVo> securitiesFutureVoList = redisCache.getCacheMapValue("money","securitiesFutureVoList");
+        return CollectionUtils.isEmpty(securitiesFutureVoList)?new ArrayList<>():securitiesFutureVoList;
+    }
+
+    @Override
     public List<SecuritiesFutureVo> findList() {
         //1.查询有效配置
         List<SecuritiesFutureVo> securitiesFutureVoList = redisCache.getCacheMapValue("money","securitiesFutureVoList");

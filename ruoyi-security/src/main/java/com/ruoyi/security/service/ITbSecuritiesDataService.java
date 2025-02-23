@@ -66,6 +66,11 @@ public interface ITbSecuritiesDataService
     boolean crawl();
 
     /**
+     * 爬取证劵交易数据
+     */
+    List<SecuritiesFutureVo> lists();
+
+    /**
      * 查询实时期货分析数据
      */
     List<SecuritiesFutureVo> findList();

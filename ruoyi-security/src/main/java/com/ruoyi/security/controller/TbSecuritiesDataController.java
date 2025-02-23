@@ -25,10 +25,10 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 证劵交易Controller
+ * 证劵交易数据源Controller
  * 
  * @author ruoyi
- * @date 2025-01-12
+ * @date 2024-07-21
  */
 @RestController
 @RequestMapping("/security/futures")
@@ -38,7 +38,7 @@ public class TbSecuritiesDataController extends BaseController
     private ITbSecuritiesDataService tbSecuritiesDataService;
 
     /**
-     * 查询证劵交易列表
+     * 查询证劵交易数据源列表
      */
     @PreAuthorize("@ss.hasPermi('security:futures:list')")
     @GetMapping("/list")
@@ -50,20 +50,20 @@ public class TbSecuritiesDataController extends BaseController
     }
 
     /**
-     * 导出证劵交易列表
+     * 导出证劵交易数据源列表
      */
     @PreAuthorize("@ss.hasPermi('security:futures:export')")
-    @Log(title = "证劵交易", businessType = BusinessType.EXPORT)
+    @Log(title = "证劵交易数据源", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, TbSecuritiesData tbSecuritiesData)
     {
         List<TbSecuritiesData> list = tbSecuritiesDataService.selectTbSecuritiesDataList(tbSecuritiesData);
         ExcelUtil<TbSecuritiesData> util = new ExcelUtil<TbSecuritiesData>(TbSecuritiesData.class);
-        util.exportExcel(response, list, "证劵交易数据");
+        util.exportExcel(response, list, "证劵交易数据源数据");
     }
 
     /**
-     * 获取证劵交易详细信息
+     * 获取证劵交易数据源详细信息
      */
     @PreAuthorize("@ss.hasPermi('security:futures:query')")
     @GetMapping(value = "/{id}")
@@ -73,10 +73,10 @@ public class TbSecuritiesDataController extends BaseController
     }
 
     /**
-     * 新增证劵交易
+     * 新增证劵交易数据源
      */
     @PreAuthorize("@ss.hasPermi('security:futures:add')")
-    @Log(title = "证劵交易", businessType = BusinessType.INSERT)
+    @Log(title = "证劵交易数据源", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody TbSecuritiesData tbSecuritiesData)
     {
@@ -84,10 +84,10 @@ public class TbSecuritiesDataController extends BaseController
     }
 
     /**
-     * 修改证劵交易
+     * 修改证劵交易数据源
      */
     @PreAuthorize("@ss.hasPermi('security:futures:edit')")
-    @Log(title = "证劵交易", businessType = BusinessType.UPDATE)
+    @Log(title = "证劵交易数据源", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody TbSecuritiesData tbSecuritiesData)
     {
@@ -95,10 +95,10 @@ public class TbSecuritiesDataController extends BaseController
     }
 
     /**
-     * 删除证劵交易
+     * 删除证劵交易数据源
      */
     @PreAuthorize("@ss.hasPermi('security:futures:remove')")
-    @Log(title = "证劵交易", businessType = BusinessType.DELETE)
+    @Log(title = "证劵交易数据源", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
@@ -108,7 +108,7 @@ public class TbSecuritiesDataController extends BaseController
     /**
      * 爬取证劵交易数据
      */
-    //@Anonymous
+    @Anonymous
     //@PreAuthorize("@ss.hasPermi('security:futures:crawl')")
     @Log(title = "证劵交易数据源", businessType = BusinessType.OTHER)
     @GetMapping("/crawl")
@@ -118,9 +118,19 @@ public class TbSecuritiesDataController extends BaseController
     }
 
     /**
+     * 爬取证劵交易数据
+     */
+    @GetMapping("/lists")
+    public TableDataInfo lists()
+    {
+        startPage();
+        List<SecuritiesFutureVo> list = tbSecuritiesDataService.lists();
+        return getDataTable(list);
+    }
+
+    /**
      * 查询实时期货分析数据
      */
-    //@PreAuthorize("@ss.hasPermi('security:futures:findList')")
     @GetMapping("/findList")
     public TableDataInfo findList()
     {
